@@ -1,41 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    let result = await axios.post('http://localhost:5000/login', {
+      email,
+      password
+    })
+    result = result.data
+    if (result && result.result === 'No record') {
+      alert("No user exist");
+    } else if (result && result._id) {
+      localStorage.setItem('user', JSON.stringify(result))
+      navigation("/")
+    }
+    else {
+      alert("enter correct details")
+    }
+
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-       
+
         <h2 className="text-2xl font-bold text-center text-green-500 mb-6">Login</h2>
 
-        <form>
-          
+        <form onSubmit={handleLogin}>
+
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
               type="email"
-              id="email"
+              value={email}
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
 
-    
+
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
               type="password"
-              id="password"
+              value={password}
               placeholder="Enter your password"
               className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </div>
 
-      
+
           <div className="flex items-center justify-between mb-4">
             <label className="flex items-center">
               <input
@@ -49,7 +74,7 @@ const Login = () => {
             </a>
           </div>
 
-         
+
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300"

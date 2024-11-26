@@ -7,9 +7,7 @@ function Layout() {
 
   return (
     <>
-     
       {location.pathname !== "/" && <Nav />}
-      
       <Outlet />
     </>
   );

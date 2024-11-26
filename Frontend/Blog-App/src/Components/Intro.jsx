@@ -15,9 +15,9 @@ const Intro = () => {
                 className="absolute top-0 left-0 w-full h-full object-cover blur-sm"
                 alt="Background"
             />
-            <div className="absolute inset-0 flex items-center justify-center" onClick={handleChange}>
+            <div className="absolute inset-0 flex items-center justify-center" >
                 <button
-                    className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded text-sm sm:text-base md:text-lg lg:text-xl hover:scale-105 transform transition-transform duration-300" >
+                    className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded text-sm sm:text-base md:text-lg lg:text-xl hover:scale-105 transform transition-transform duration-300" onClick={handleChange}>
                     Get Started
                     <FaLongArrowAltRight />
                 </button>
