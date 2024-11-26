@@ -17,14 +17,14 @@ import Layout from "./Layout.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      {/*(intro screen) */}
+      {/* Intro screen */}
       <Route index element={<Intro />} />
-      {/* other routes */}
+      {/* Home Route */}
       <Route path="home" element={<Post />} />
-      <Route path="about" element={<h1>Hi</h1>} />
+      <Route path="about" element={<h1>About Page</h1>} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
-    </Route>  
+    </Route>
   )
 );
 
