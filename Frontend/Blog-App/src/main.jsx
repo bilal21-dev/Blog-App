@@ -13,6 +13,8 @@ import Login from "./Components/Register/Login.jsx";
 import SignUp from "./Components/Register/Signup.jsx";
 import Post from "./Components/Home/Post.jsx";
 import Layout from "./Layout.jsx";
+import { AuthProvider } from "./Components/AuthContext.jsx";
+import Profile from "./Components/ProfilePage/Profile.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,12 +26,16 @@ const router = createBrowserRouter(
       <Route path="about" element={<h1>About Page</h1>} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
+      <Route path="profile" element={<Profile/>} />
+
     </Route>
   )
 );
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

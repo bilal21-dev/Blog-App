@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useAuth } from "../AuthContext";
 
 
 const SignUp = () => {
@@ -8,6 +9,7 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { setProfile, setRegister } = useAuth();
     const collectData = async (e) => {
         e.preventDefault();
         let result = await axios.post('http://localhost:5000/signup', {
@@ -20,8 +22,12 @@ const SignUp = () => {
             alert("Enter Complete details")
         }
         else {
-            navigate('/home');
+            navigate('/profile');
             localStorage.setItem("user", JSON.stringify(result));
+            setRegister(true);
+            localStorage.setItem("registry", true)
+            setProfile(true)
+            localStorage.setItem("profile",true)
         }
     }
     return (
@@ -40,7 +46,7 @@ const SignUp = () => {
                             value={name}
                             placeholder="Enter your username"
                             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            onChange={(e)=>setName(e.target.value)}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
@@ -54,7 +60,7 @@ const SignUp = () => {
                             value={email}
                             placeholder="Enter your email"
                             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            onChange={(e)=>setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
 
                         />
                     </div>
@@ -69,7 +75,7 @@ const SignUp = () => {
                             value={password}
                             placeholder="Enter your password"
                             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            onChange={(e)=>setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
@@ -83,7 +89,7 @@ const SignUp = () => {
                             value={password}
                             placeholder="Confirm your password"
                             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            onChange={(e)=>setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 

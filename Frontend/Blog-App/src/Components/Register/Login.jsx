@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useAuth } from "../AuthContext";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { setProfile, setRegister } = useAuth();
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     let result = await axios.post('http://localhost:5000/login', {
@@ -15,10 +17,14 @@ const Login = () => {
     })
     result = result.data
     if (result && result.result === 'No record') {
-      alert("No user exist");
+      alert("Incorrect password or email");
     } else if (result && result._id) {
+      navigate("/profile")
       localStorage.setItem('user', JSON.stringify(result))
-      navigation("/")
+      setRegister(true);
+      localStorage.setItem("registry", true)
+      setProfile(true)
+      localStorage.setItem("profile", true)
     }
     else {
       alert("enter correct details")
@@ -42,7 +48,7 @@ const Login = () => {
               value={email}
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -56,7 +62,7 @@ const Login = () => {
               value={password}
               placeholder="Enter your password"
               className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

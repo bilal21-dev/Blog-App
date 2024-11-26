@@ -17,8 +17,8 @@ const Post = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center ">
+      <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden border-2">
         {/* Caption Section */}
         <div className="p-4 border-b">
           <h2 className="text-lg font-bold text-gray-800">Card Caption</h2>

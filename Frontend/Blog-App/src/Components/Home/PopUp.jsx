@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';  // Import PropTypes
 import '../../styles/PopUp.css';
+import { MdCancel } from "react-icons/md";
 
 function PopUp({ closePopUp }) {
   const [title, setTitle] = useState('');
@@ -52,46 +53,46 @@ function PopUp({ closePopUp }) {
     <div className="popup-overlay">
       <div className="popup-container">
         <button className="close-btn" onClick={closePopUp}>
-          &times;
+        <MdCancel />
         </button>
-        <h1 className="heading">Create Blog</h1>
+        <h1 className="heading font-extrabold text-green-500 text-3xl">Create Blog</h1>
         <div className="form-group">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title" className='font-bold'>Title</label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter the blog title"
-            className="input-field"
+            className="input-field focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
         </div>
         <div className="form-group">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description" className='font-bold'>Description</label>
           <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter a short description"
-            className="textarea-field"
+            className="textarea-field focus:outline-none focus:ring-green-500 focus:border-green-500"
           ></textarea>
         </div>
         <div className="form-group">
-          <label htmlFor="image">Upload Image</label>
+          <label htmlFor="image" className='font-bold'>Upload Image</label>
           <input
             type="file"
             id="image"
             accept="image/*"
             onChange={handleImageUpload}
-            className="file-input"
+            className="file-input focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
           {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
         </div>
-        <div className="form-group">
-          <label htmlFor="editor">Content</label>
-          <div ref={editorRef} className="quill-editor"></div>
+        <div className="form-group ">
+          <label htmlFor="editor" className='font-bold'>Content</label>
+          <div ref={editorRef} className="quill-editor "></div>
         </div>
-        <button className="submit-btn" onClick={handleSubmit}>
+        <button className="submit-btn bg-green-500" onClick={handleSubmit}>
           Save Blog
         </button>
       </div>
