@@ -5,58 +5,77 @@ import PopUp from "./PopUp";
 
 const Post = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [blogs, setBlogs] = useState([]);
 
   const handleIconClick = () => {
-    setIsPopUpVisible(true); 
-    console.log(isPopUpVisible);
+    setIsPopUpVisible(true);
   };
 
   const handleClosePopUp = () => {
-    console.log(isPopUpVisible);
-    setIsPopUpVisible(false); 
+    setIsPopUpVisible(false);
+  };
+
+  const addBlog = (newBlog) => {
+    setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
-      <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden border-2">
-        {/* Caption Section */}
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-bold text-gray-800">Card Caption</h2>
-          <p className="text-sm text-gray-600">This is a brief description of the card.</p>
-        </div>
+    <div className="min-h-screen  flex flex-col items-center justify-center p-4 space-y-6">
+      {/* Blog Posts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl ">
+        {blogs.map((blog, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200"
+          >
+            {/* Caption Section */}
+            <div className="p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-800">{blog.title}</h2>
+              <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
+            </div>
 
-        {/* Image Section */}
-        <img
-          src="https://via.placeholder.com/400x250"
-          alt="Card"
-          className="w-full h-48 object-cover"
-        />
+            {/* Image Section */}
+            {blog.image ? (
+              <img
+                src={URL.createObjectURL(blog.image)}
+                alt="Blog"
+                className="w-full h-64 object-cover"
+              />
+            ) : (
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Placeholder"
+                className="w-full h-64 object-cover"
+              />
+            )}
 
-        {/* Action Row */}
-        <div className="p-4 flex justify-around items-center border-t">
-          <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500">
-            <FaRegHeart />
-            <span>Like</span>
-          </button>
-          <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500">
-            <FaRegComment />
-            <span>Comment</span>
-          </button>
-          <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500">
-            <FaShareSquare />
-            <span>Share</span>
-          </button>
-        </div>
+            {/* Action Row */}
+            <div className="p-6 flex justify-around items-center border-t">
+              <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500">
+                <FaRegHeart />
+                <span>Like</span>
+              </button>
+              <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500">
+                <FaRegComment />
+                <span>Comment</span>
+              </button>
+              <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500">
+                <FaShareSquare />
+                <span>Share</span>
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* floating Icon to Trigger Pop-Up */}
+      {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
-        onClick={handleIconClick} // Render the PopUp on click
-        className="fixed bottom-1 right-1 text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
+        onClick={handleIconClick}
+        className="fixed bottom-5 right-5 text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
       />
 
-      {/* conditionally Render the PopUp */}
-      {isPopUpVisible && <PopUp closePopUp={handleClosePopUp} />}
+      {/* Conditionally Render the PopUp */}
+      {isPopUpVisible && <PopUp closePopUp={handleClosePopUp} addBlog={addBlog} />}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';  // Import PropTypes
 import '../../styles/PopUp.css';
 import { MdCancel } from "react-icons/md";
 
-function PopUp({ closePopUp }) {
+function PopUp({ closePopUp,addBlog }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -40,7 +40,8 @@ function PopUp({ closePopUp }) {
       content,
     };
 
-    console.log('Blog Data:', blogData);
+    // console.log('Blog Data:', blogData);
+    addBlog(blogData)
     alert('Blog saved successfully!');
     closePopUp(); // Close the pop-up after submission
     setTitle('');
@@ -92,7 +93,7 @@ function PopUp({ closePopUp }) {
           <label htmlFor="editor" className='font-bold'>Content</label>
           <div ref={editorRef} className="quill-editor "></div>
         </div>
-        <button className="submit-btn bg-green-500" onClick={handleSubmit}>
+        <button className="submit-btn bg-green-500 hover:bg-green-700 hover:transition-colors duration-300" onClick={handleSubmit}>
           Save Blog
         </button>
       </div>
