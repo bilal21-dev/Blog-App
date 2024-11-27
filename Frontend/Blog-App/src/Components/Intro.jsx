@@ -50,7 +50,7 @@ const Intro = () => {
         navigate("/home");
     };
     const animation = {
-        animation: 'tracking-in-expand-fwd-bottom 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) both',
+        animation: 'tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both',
     }
 
     return (
@@ -65,7 +65,7 @@ const Intro = () => {
             </div>
 
             {/* Green Box Section (1/4) */}
-            <div className="min-h-screen md:w-2/4 w-full bg-green-500 flex flex-col gap-5 items-center justify-center">
+            <div className="min-h-screen md:w-2/4 w-full bg-gradient-to-r from-green-500 to-yellow-400 h-screen flex flex-col gap-5 items-center justify-center">
                 <p className="text-white text-[40px] font-bold px-5" style={animation}>Create Your Blogs and share it with the World<FaGlobeAmericas /></p>
                 <div className="">
                     <button

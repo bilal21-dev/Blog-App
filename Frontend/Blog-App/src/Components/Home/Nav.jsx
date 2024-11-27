@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FaBlog } from "react-icons/fa6";
 import Dropdown from './Dropdown';
 import { useAuth } from '../AuthContext';
@@ -15,68 +16,46 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav className="bg-black text-white p-4 m-2 rounded-2xl">
-                <div className="flex justify-between items-center">
+            <nav className="bg-green-500 text-white p-4 m-2 rounded-2xl">
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
                     {/* Logo Section */}
-                    <div className="text-xl font-bold text-green-500 flex gap-2 items-center">
+                    <div className="text-xl font-bold text-white flex gap-2 items-center justify-center lg:justify-start">
                         <FaBlog />
                         <Link to="/">BLOGIFY</Link>
                     </div>
 
                     {/* Menu Items */}
-                    <ul className="hidden lg:flex space-x-6">
-                        <li className="py-2 text-green-500 hover:text-white transition-colors duration-200 text-lg">
-                            <Link to="/about">About</Link>
+                    <ul className="flex flex-col lg:flex-row gap-2 lg:gap-6 items-center">
+                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                            <NavLink to="/home" className={(e) => (e.isActive ? "text-yellow-300" : "")}>Home</NavLink>
                         </li>
-                        <li className="py-2 text-green-500 hover:text-white transition-colors duration-200 text-lg">
-                            <Link to="/contact">Contact-US</Link>
+                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                            <NavLink to="/about">About</NavLink>
+                        </li>
+                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                            <NavLink to="/contact">Contact-US</NavLink>
                         </li>
                         {profile ? (
-                            <li className="px-5 py-2 text-3xl text-green-500 hover:text-white transition-colors duration-200">
+                            <li className="px-4 md:px-5 py-1 md:py-2 text-2xl md:text-3xl text-white hover:text-yellow-300 transition-colors duration-200">
                                 <Link to="/profile">
                                     <CgProfile />
                                 </Link>
                             </li>
                         ) : (
                             <li
-                                className="bg-green-500 text-white rounded-2xl px-5 py-2 hover:bg-green-600 transform transition-transform duration-300"
+                                className="text-white font-medium rounded-lg px-3 md:px-5 py-1 md:py-2 hover:bg-white hover:text-green-500 transition-colors duration-200 relative"
                                 onClick={() => setDropdown((prev) => !prev)}
                             >
                                 Register
+                                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
+
                             </li>
                         )}
                     </ul>
                 </div>
-
-                {/* Mobile View */}
-                <ul className="flex flex-col gap-4 mt-4 bg-black p-4 rounded-md shadow-lg lg:hidden">
-                    <li className="py-2 text-green-500 hover:text-white transition-colors duration-200 text-lg">
-                        <Link to="/about">About</Link>
-                    </li>
-                    <li className="py-2 text-green-500 hover:text-white transition-colors duration-200 text-lg">
-                        <Link to="/contact">Contact-US</Link>
-                    </li>
-                    {profile ? (
-                        <li className="px-5 py-2 text-3xl text-green-500 hover:text-white transition-colors duration-200">
-                            <Link to="/profile">
-                                <CgProfile />
-                            </Link>
-                        </li>
-                    ) : (
-                        <li
-                            className="bg-green-500 text-white rounded-2xl px-5 py-2 hover:bg-green-600 transform transition-transform duration-300"
-                            onClick={() => setDropdown((prev) => !prev)}
-                        >
-                            Register
-                        </li>
-                    )}
-                </ul>
-
                 {/* Dropdown */}
-                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
             </nav>
         </div>
-
     );
 };
 

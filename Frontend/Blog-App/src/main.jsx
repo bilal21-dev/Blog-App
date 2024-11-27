@@ -15,6 +15,7 @@ import Post from "./Components/Home/Post.jsx";
 import Layout from "./Layout.jsx";
 import { AuthProvider } from "./Components/AuthContext.jsx";
 import Profile from "./Components/ProfilePage/Profile.jsx";
+import Contact from "./Components/Contact/Contact.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,8 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
       <Route path="profile" element={<Profile/>} />
+      <Route path="contact" element={<Contact/>} />
+
 
     </Route>
   )
