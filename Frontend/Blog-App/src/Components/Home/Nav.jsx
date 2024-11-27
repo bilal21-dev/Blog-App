@@ -47,13 +47,14 @@ const Navbar = () => {
                                 onClick={() => setDropdown((prev) => !prev)}
                             >
                                 Register
-                                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
+                               
 
                             </li>
                         )}
                     </ul>
                 </div>
                 {/* Dropdown */}
+                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
             </nav>
         </div>
     );

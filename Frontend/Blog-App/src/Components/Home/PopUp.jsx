@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';  // Import PropTypes
 import '../../styles/PopUp.css';
 import { MdCancel } from "react-icons/md";
-
-function PopUp({ closePopUp,addBlog }) {
+import axios from 'axios'
+function PopUp({ closePopUp, addBlog }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -31,7 +31,10 @@ function PopUp({ closePopUp,addBlog }) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    let userID = localStorage.getItem("user");
+    userID = JSON.parse(userID);
+    userID = userID._id;
     const content = editorRef.current.quillInstance.root.innerHTML;
     const blogData = {
       title,
@@ -39,8 +42,13 @@ function PopUp({ closePopUp,addBlog }) {
       image,
       content,
     };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("content", content);
+    formData.append("image", image); // The file object
+    formData.append("author", userID);
 
-    // console.log('Blog Data:', blogData);
     addBlog(blogData)
     alert('Blog saved successfully!');
     closePopUp(); // Close the pop-up after submission
@@ -48,13 +56,18 @@ function PopUp({ closePopUp,addBlog }) {
     setDescription('');
     setImage(null);
     setImagePreview(null);
+
+    let result = await axios.post("http://localhost:5000/home", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    result = result.data;
   };
 
   return (
     <div className="popup-overlay">
       <div className="popup-container">
         <button className="close-btn" onClick={closePopUp}>
-        <MdCancel />
+          <MdCancel />
         </button>
         <h1 className="heading font-extrabold text-green-500 text-3xl">Create Blog</h1>
         <div className="form-group">
@@ -97,10 +110,10 @@ function PopUp({ closePopUp,addBlog }) {
           Save Blog
         </button>
       </div>
-      
+
     </div>
 
-    
+
   );
 }
 
