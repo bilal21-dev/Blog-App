@@ -34,7 +34,7 @@ app.post("/signup", async (req, res) => {
         delete result.password;
         res.send(result);
     } else {
-        res.send({ result: "Enter Complete details" });
+        res.send({ result: "Enter Complete information" });
     }
 });
 
