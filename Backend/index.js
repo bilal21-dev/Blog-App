@@ -56,7 +56,8 @@ app.post("/login", async (req, res) => {
 app.post("/home", upload.single("image"), async (req, res) => {
     try {
         const { title, description, content, author } = req.body;
-        const image = req.file ? req.file.path : null; // Save image path
+        // const image = req.file ? req.file.path : null; // Save image path
+        const image = req.file ? path.join('uploads', req.file.filename).replace(/\\/g, '/') : null;
 
         const blog = new Blog({ title, description, content, image, author });
         const savedBlog = await blog.save();
@@ -67,6 +68,26 @@ app.post("/home", upload.single("image"), async (req, res) => {
         res.send({ error: "Failed to save blog" });
     }
 });
+
+app.get("/home", async (req, res) => {
+    let blogs = await Blog.find()
+    if (blogs.length > 0) {
+        res.send(blogs)
+    }
+    else {
+        res.send("no result");
+    }
+})
+app.get("/profile/:id", async (req, res) => {
+    let result = await Blog.find({ author : req.params.id })
+    if (result) {
+            res.send(result)
+    }
+    else {
+            res.send({ result: "No record" })
+    }
+})
+
 
 // Start server
 app.listen(5000, () => {

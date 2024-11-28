@@ -11,9 +11,12 @@ export const AuthProvider = ({ children }) => {
     const [blogs, setBlogs] = useState(() => {
         return JSON.parse(localStorage.getItem("blogs")) || [];
     });
+    const [myblogs, setMyblogs] = useState(() => {
+        return JSON.parse(localStorage.getItem("myblogs")) || [];
+    });
 
     return (
-        <AuthContext.Provider value={{ register, setRegister, profile, setProfile ,blogs,setBlogs}}>
+        <AuthContext.Provider value={{ register, setRegister, profile, setProfile ,blogs,setBlogs,myblogs,setMyblogs}}>
             {children}
         </AuthContext.Provider>
     );

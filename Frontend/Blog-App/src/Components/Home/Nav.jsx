@@ -9,9 +9,11 @@ import { CgProfile } from "react-icons/cg";
 const Navbar = () => {
     const [dropdown, setDropdown] = useState(false);
     const { profile } = useAuth();
+    let user = localStorage.getItem("user");
+    user = JSON.parse(user)
 
     const closeDropdown = () => {
-        setDropdown(false);
+        setDropdown(true);
     };
 
     return (
@@ -37,7 +39,7 @@ const Navbar = () => {
                         </li>
                         {profile ? (
                             <li className="px-4 md:px-5 py-1 md:py-2 text-2xl md:text-3xl text-white hover:text-yellow-300 transition-colors duration-200">
-                                <Link to="/profile">
+                                <Link to={`/profile/${user._id}`}>
                                     <CgProfile />
                                 </Link>
                             </li>
@@ -47,14 +49,12 @@ const Navbar = () => {
                                 onClick={() => setDropdown((prev) => !prev)}
                             >
                                 Register
-                               
-
+                                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
                             </li>
                         )}
                     </ul>
                 </div>
                 {/* Dropdown */}
-                {dropdown && <Dropdown closeDropdown={closeDropdown} />}
             </nav>
         </div>
     );

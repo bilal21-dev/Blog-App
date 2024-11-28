@@ -11,6 +11,8 @@ const SignUp = () => {
     const navigate = useNavigate();
     const { setProfile, setRegister } = useAuth();
     const collectData = async (e) => {
+        let user = localStorage.getItem("user");
+        user = JSON.parse(user)
         e.preventDefault();
         let result = await axios.post('http://localhost:5000/signup', {
             name,
@@ -22,12 +24,12 @@ const SignUp = () => {
             alert("Enter Complete details")
         }
         else {
-            navigate('/profile');
             localStorage.setItem("user", JSON.stringify(result));
             setRegister(true);
             localStorage.setItem("registry", true)
             setProfile(true)
-            localStorage.setItem("profile",true)
+            localStorage.setItem("profile", true)
+            navigate(`/profile/${result._id}`);
         }
     }
     return (

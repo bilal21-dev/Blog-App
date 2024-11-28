@@ -10,6 +10,8 @@ const Login = () => {
   const { setProfile, setRegister } = useAuth();
   const navigate = useNavigate();
   const handleLogin = async (e) => {
+    let user = localStorage.getItem("user");
+    user = JSON.parse(user)
     e.preventDefault();
     let result = await axios.post('http://localhost:5000/login', {
       email,
@@ -19,12 +21,12 @@ const Login = () => {
     if (result && result.result === 'No record') {
       alert("Incorrect password or email");
     } else if (result && result._id) {
-      navigate("/profile")
       localStorage.setItem('user', JSON.stringify(result))
       setRegister(true);
       localStorage.setItem("registry", true)
       setProfile(true)
       localStorage.setItem("profile", true)
+      navigate(`/profile/${result._id}`)
     }
     else {
       alert("enter correct details")

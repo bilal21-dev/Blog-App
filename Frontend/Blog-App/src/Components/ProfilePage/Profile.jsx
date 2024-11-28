@@ -1,24 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { useAuth } from '../AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaRegComment, FaShareSquare } from "react-icons/fa";
-
+import axios from 'axios';
 
 const Profile = () => {
     let user = localStorage.getItem("user");
     user = JSON.parse(user)
     user = user.name.charAt(0).toUpperCase() + user.name.slice(1)
-    const { setProfile, setRegister, blogs } = useAuth();
+    const { setProfile, setRegister, myblogs, setMyblogs } = useAuth();
     const navigate = useNavigate();
+    const params = useParams();
 
     const handleChange = () => {
         localStorage.clear();
         setProfile(false);
         setRegister(false);
         navigate("/home");
-
-
+    }
+    useEffect(() => {
+        fetchMyBlogs();
+    }, [])
+    const fetchMyBlogs = async () => {
+        // try {
+        const response = await axios.get(`http://localhost:5000/profile/${params.id}`);
+        setMyblogs(response.data);
+        // setLoading(false);
+        // } catch (err) {
+        // setError(err.message || "Failed to fetch blogs");
+        // setLoading(false);
+        // }
     }
     return (
         <div className="bg-white min-h-screen">
@@ -33,7 +45,7 @@ const Profile = () => {
                 </div>
                 <div className="bg-slate-100 md:w-3/4 w-full p-4 rounded-md shadow-lg shadow-black">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {blogs.map((blog, index) => (
+                        {myblogs.map((blog, index) => (
                             <div
                                 key={index}
                                 className="bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200"
@@ -47,8 +59,8 @@ const Profile = () => {
                                 {/* Image Section */}
                                 {blog.image ? (
                                     <img
-                                        src={URL.createObjectURL(blog.image)}
-                                        alt="Blog"
+                                        src={`http://localhost:5000/${blog.image}`}
+                                        alt={blog.title}
                                         className="w-full h-64 object-cover"
                                     />
                                 ) : (
