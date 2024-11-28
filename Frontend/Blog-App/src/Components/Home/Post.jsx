@@ -2,13 +2,20 @@ import { useState } from "react";
 import { FaRegHeart, FaRegComment, FaShareSquare } from "react-icons/fa";
 import { IoCreate } from "react-icons/io5";
 import PopUp from "./PopUp";
+import { useAuth } from '../AuthContext';
+
 
 const Post = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [blogs, setBlogs] = useState([]);
+  const { register, blogs, setBlogs } = useAuth()
 
   const handleIconClick = () => {
-    setIsPopUpVisible(true);
+    if (register) {
+      setIsPopUpVisible(true);
+    }
+    else {
+      alert("You must resgiter to create a post")
+    }
   };
 
   const handleClosePopUp = () => {
@@ -71,7 +78,7 @@ const Post = () => {
       {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
         onClick={handleIconClick}
-        className="fixed bottom-5 right-5 text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
+        className="fixed bottom-2 right-2 text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
       />
 
       {/* Conditionally Render the PopUp */}
