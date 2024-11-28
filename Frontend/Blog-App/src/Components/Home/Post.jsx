@@ -78,52 +78,57 @@ const Post = () => {
   return (
     <div className="min-h-screen  flex flex-col items-center justify-center p-4 space-y-6">
       {/* Blog Posts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl ">
-        {blogs.map((blog, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200"
-          >
-            {/* Caption Section */}
-            <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-800">{blog.title}</h2>
-              <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
-            </div>
+      {Array.isArray(blogs) && blogs.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl ">
+          {blogs.map((blog, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200"
+            >
+              {/* Caption Section */}
+              <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
+              <div className="p-6 border-b">
+                <h2 className="text-xl font-bold text-gray-800">{blog.title}</h2>
+                <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
+              </div>
 
-            {/* Image Section */}
-            {blog.image ? (
-              <img
-                src={`http://localhost:5000/${blog.image}`}
-                alt={blog.title}
-                className="w-full h-64 object-cover"
-              />
-            ) : (
-              <img
-                src="https://via.placeholder.com/400x250"
-                alt="Placeholder"
-                className="w-full h-64 object-cover"
-              />
-            )}
+              {/* Image Section */}
+              {blog.image ? (
+                <img
+                  src={`http://localhost:5000/${blog.image}`}
+                  alt={blog.title}
+                  className="w-full h-64 object-cover"
+                />
+              ) : (
+                <img
+                  src="https://via.placeholder.com/400x250"
+                  alt="Placeholder"
+                  className="w-full h-64 object-cover"
+                />
+              )}
 
-            {/* Action Row */}
-            <div className="p-6 flex justify-around items-center border-t">
-              <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500">
-                <FaRegHeart />
-                <span>Like</span>
-              </button>
-              <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500">
-                <FaRegComment />
-                <span>Comment</span>
-              </button>
-              <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500">
-                <FaShareSquare />
-                <span>Share</span>
-              </button>
+              {/* Action Row */}
+              <div className="p-6 flex justify-around items-center border-t">
+                <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500">
+                  <FaRegHeart />
+                  <span>Like</span>
+                </button>
+                <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500">
+                  <FaRegComment />
+                  <span>Comment</span>
+                </button>
+                <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500">
+                  <FaShareSquare />
+                  <span>Share</span>
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+           <p className="text-gray-400">No Blogs to show</p>
+      )}
+
       {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
         onClick={handleIconClick}
