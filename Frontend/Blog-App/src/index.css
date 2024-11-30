@@ -16,6 +16,7 @@
     background-color: white;
     border-color:green;
     border:1px solid gray;
+    z-index: 9999;
 }
 .dropdown::before{
     content:' ';
@@ -71,3 +72,7 @@
     opacity: 1;
   }
 }
+
+
+
+

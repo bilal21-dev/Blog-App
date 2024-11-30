@@ -46,7 +46,9 @@ function PopUp({ closePopUp, addBlog }) {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("content", content);
-    formData.append("image", image); // The file object
+    if (image) {
+      formData.append("image", image);
+    } 
     formData.append("author", userID);
 
     addBlog(blogData)
