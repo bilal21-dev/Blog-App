@@ -17,35 +17,37 @@ const Navbar = () => {
     };
 
     return (
-        <div>
-            <nav className="bg-green-500 text-white p-4 m-2 rounded-2xl">
+        <div className="bg-gradient-to-r from-green-400 to-yellow-300 m-0 pt-2 ">
+            <nav className="bg-black text-green-500 p-4 rounded-2xl mx-4 z-[999]">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
                     {/* Logo Section */}
-                    <div className="text-xl font-bold text-white flex gap-2 items-center justify-center lg:justify-start">
+                    <div className="text-xl font-bold text-yellow-400 flex gap-2 items-center justify-center lg:justify-start">
                         <FaBlog />
                         <Link to="/">BLOGIFY</Link>
                     </div>
 
                     {/* Menu Items */}
                     <ul className="flex flex-col lg:flex-row gap-2 lg:gap-6 items-center">
-                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
-                            <NavLink to="/home" className={(e) => (e.isActive ? "text-yellow-300" : "")}>Home</NavLink>
+                        <li className="py-1 md:py-2 text-yellow-400 hover:text-green-400 transition-colors duration-200 font-medium">
+                            <NavLink to="/home" className={(e) => (e.isActive ? "text-green-400" : "")}>
+                                Home
+                            </NavLink>
                         </li>
-                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
-                            <NavLink to="/about">About</NavLink>
+                        <li className="py-1 md:py-2 text-yellow-400 hover:text-green-400 transition-colors duration-200 font-medium">
+                            <NavLink to="/about" className={(e) => (e.isActive ? "text-green-400" : "")}>About</NavLink>
                         </li>
-                        <li className="py-1 md:py-2 text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
-                            <NavLink to="/contact">Contact-US</NavLink>
+                        <li className="py-1 md:py-2 text-yellow-400 hover:text-green-400 transition-colors duration-200 font-medium">
+                            <NavLink to="/contact" className={(e) => (e.isActive ? "text-green-400" : "")}>Contact-US</NavLink>
                         </li>
                         {profile ? (
-                            <li className="px-4 md:px-5 py-1 md:py-2 text-2xl md:text-3xl text-white hover:text-yellow-300 transition-colors duration-200">
-                                <Link to={`/profile/${user._id}`}>
+                            <li className="px-4 md:px-5 py-1 md:py-2 text-2xl md:text-3xl text-yellow-400 hover:text-green-400 transition-colors duration-200">
+                                <Link to={`/profile/${user._id}`} className={(e) => (e.isActive ? "text-green-400" : "")}>
                                     <CgProfile />
                                 </Link>
                             </li>
                         ) : (
                             <li
-                                className="text-white font-medium rounded-lg px-3 md:px-5 py-1 md:py-2 hover:bg-white hover:text-green-500 transition-colors duration-200 relative"
+                                className="text-yellow-400 font-medium rounded-lg px-3 md:px-5 py-1 md:py-2 hover:bg-white hover:text-green-500 transition-colors duration-200 relative"
                                 onClick={() => setDropdown((prev) => !prev)}
                             >
                                 Register
@@ -54,7 +56,6 @@ const Navbar = () => {
                         )}
                     </ul>
                 </div>
-                {/* Dropdown */}
             </nav>
         </div>
     );

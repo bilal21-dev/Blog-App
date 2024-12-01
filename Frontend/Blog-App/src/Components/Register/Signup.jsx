@@ -33,7 +33,7 @@ const SignUp = () => {
         }
     }
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-r from-green-400 to-yellow-300">
             <div className="bg-white shadow-lg shadow-black rounded-lg p-8 w-full max-w-md">
 
                 <h2 className="text-2xl font-bold text-center text-green-500 mb-6">Sign Up</h2>

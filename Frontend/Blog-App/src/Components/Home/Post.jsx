@@ -72,22 +72,35 @@ const Post = () => {
   if (error) {
     return <p className="flex justify-center align-middle text-center">Error: {error}</p>;
   }
+  const handleSharePost = async (postId) => {
+    const userId = JSON.parse(localStorage.getItem("user"))._id; // Get logged-in user ID
 
+    try {
+      const response = await axios.post(`http://localhost:5000/profile/${userId}/share`, { postId });
+      alert("Post shared successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to share post");
+    }
+  };
+  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6 bg-gradient-to-r from-green-400 to-yellow-300">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
         {loading ? (
           <div className="absolute top-[250px] left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4">
             <div className="loader border-t-4 border-green-500 rounded-full w-16 h-16 animate-spin"></div>
-            <p className="ml-1 text-lg font-semibold text-black">Loading products...</p>
+            <p className="ml-1 text-lg font-semibold text-black">Loading blogs...</p>
           </div>
-        ) : (
-          Array.isArray(blogs) && blogs.length > 0 ? (
-            blogs.map((blog, index) => (
-              <div key={index} className="relative perspective-1000 w-full h-[460px]">
+        ) : Array.isArray(blogs) && blogs.length > 0 ? (
+          blogs.map((blog, index) => {
+            return (
+              <div
+                key={index}
+                className="relative perspective-1000 w-full h-[460px]"
+              >
                 <div
-                  className={`absolute w-full h-full transition-transform duration-700 transform-style-3d ${flippedCards[index] ? 'rotate-y-180' : ''
-                    }`}
+                  className={`absolute w-full h-full transition-transform duration-700 transform-style-3d ${flippedCards[index] ? 'rotate-y-180' : ''}`}
                 >
                   {/* Front of Card */}
                   <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
@@ -100,11 +113,9 @@ const Post = () => {
                     </button>
 
                     {/* Caption Section */}
-                    <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">
-                      Posted by {blog.author}
-                    </p>
+                    <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
                     <div className="p-6 border-b">
-                      <h2 className="text-xl font-bold text-gray-800">{blog.title}</h2>
+                      <h2 className="text-xl font-bold text-green-500">{blog.title}</h2>
                       <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
                     </div>
 
@@ -133,7 +144,7 @@ const Post = () => {
                         <FaRegComment />
                         <span>Comment</span>
                       </button>
-                      <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500">
+                      <button className="flex items-center space-x-1 text-gray-600 hover:text-purple-500" onClick={() => handleSharePost(blog._id)}>
                         <FaShareSquare />
                         <span>Share</span>
                       </button>
@@ -155,34 +166,32 @@ const Post = () => {
                       {blog.content && (
                         <div className="prose">
                           <h3 className="text-xl font-semibold mb-2">Content</h3>
-                          <div
-                            dangerouslySetInnerHTML={{ __html: blog.content }}
-                          />
+                          <div dangerouslySetInnerHTML={{ __html: blog.content }} />;
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            // <div className="flex justify-center items-center h-[100vh]">
-              <p className="flex justify-center text-center text-gray-500 text-xl">No blogs available</p>
-            // {/* </div> */}
-          )
+            )
+          })
+        ) : (
+          <p className="flex justify-center text-center text-gray-500 text-xl">
+            No blogs available
+          </p>
         )}
       </div>
 
       {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
         onClick={handleIconClick}
-        className="fixed bottom-2 right-2 text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
+        className="fixed bottom-4 right-4 text-[60px] sm:text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
       />
 
       {/* Conditionally Render the PopUp */}
       {isPopUpVisible && <PopUp closePopUp={handleClosePopUp} addBlog={addBlog} />}
     </div>
   );
-};
 
+}
 export default Post;
