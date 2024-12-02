@@ -38,6 +38,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+
 // Login Route
 app.post("/login", async (req, res) => {
     if (req.body.password && req.body.email) {
@@ -51,6 +52,21 @@ app.post("/login", async (req, res) => {
         res.send({ result: "Enter Complete details" });
     }
 });
+
+app.get("/update/:id", async (req, res) => {
+    let user = await User.findOne({ _id: req.params.id });
+    res.send(user)
+}
+)
+app.put("/update/:id", async (req, res) => {
+    let result = await User.updateOne(
+        { _id: req.params.id },
+        {
+            $set: req.body
+        }
+    )
+    res.send(result)
+})
 
 // Home Route with Image Upload
 app.post("/home", upload.single("image"), async (req, res) => {
@@ -89,37 +105,37 @@ app.get("/home", async (req, res) => {
 // })
 app.get('/profile/:id', async (req, res) => {
     try {
-      const { id } = req.params;
-      const user = await User.findById(id).populate('sharedPosts'); // Populate shared posts
-      if (!user) return res.status(404).json({ error: "User not found" });
-  
-      const myBlogs = await Blog.find({ author: id }); // Fetch user's own blogs
-      res.status(200).json({ myBlogs, sharedPosts: user.sharedPosts });
+        const { id } = req.params;
+        const user = await User.findById(id).populate('sharedPosts'); // Populate shared posts
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const myBlogs = await Blog.find({ author: id }); // Fetch user's own blogs
+        res.status(200).json({ myBlogs, sharedPosts: user.sharedPosts });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
-  });
-  
+});
+
 app.post('/profile/:userId/share', async (req, res) => {
     try {
-      const { userId } = req.params;
-      const { postId } = req.body;
-  
-      // Find the user and update shared posts
-      const user = await User.findById(userId);
-      if (!user) return res.status(404).json({ error: "User not found" });
-  
-      if (!user.sharedPosts.includes(postId)) {
-        user.sharedPosts.push(postId);
-        await user.save();
-      }
-  
-      res.status(200).json({ message: "Post shared successfully" });
+        const { userId } = req.params;
+        const { postId } = req.body;
+
+        // Find the user and update shared posts
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (!user.sharedPosts.includes(postId)) {
+            user.sharedPosts.push(postId);
+            await user.save();
+        }
+
+        res.status(200).json({ message: "Post shared successfully" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
-  });
-  
+});
+
 // Start server
 app.listen(5000, () => {
     console.log("Server is running on port 5000");

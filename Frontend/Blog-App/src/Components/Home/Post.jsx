@@ -185,7 +185,7 @@ const Post = () => {
       {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
         onClick={handleIconClick}
-        className="fixed bottom-4 right-4 text-[60px] sm:text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
+        className="fixed bottom-4 right-2 text-[60px] sm:text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
       />
 
       {/* Conditionally Render the PopUp */}

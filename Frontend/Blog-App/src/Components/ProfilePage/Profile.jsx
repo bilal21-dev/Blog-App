@@ -4,6 +4,10 @@ import { useAuth } from '../AuthContext';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaRegComment, FaShareSquare, FaSync } from "react-icons/fa";
 import axios from 'axios';
+import EmailPopup from './EmailPopup';
+import PassPopup from './PassPopup';
+
+// import EmailPopup from './Components/ProfilePage/EmailPopup';
 
 const Profile = () => {
     let user = localStorage.getItem("user");
@@ -14,6 +18,9 @@ const Profile = () => {
     const params = useParams();
     const [flippedCards, setFlippedCards] = useState({});
     const [sharedPosts, setSharedPosts] = useState([]);
+    const [emailPopup, setEmailPopup] = useState(false);
+    const [passPopup, setPassPopup] = useState(false);
+
 
     const handleChange = () => {
         localStorage.clear();
@@ -37,10 +44,10 @@ const Profile = () => {
     };
     const toggleCardFlip = (key) => {
         setFlippedCards((prev) => ({
-          ...prev,
-          [key]: !prev[key], // Toggle the specific key
+            ...prev,
+            [key]: !prev[key], // Toggle the specific key
         }));
-      };      
+    };
     return (
         <div className="bg-gradient-to-r from-green-400 to-yellow-300 min-h-screen">
             {/* Outer container */}
@@ -50,6 +57,10 @@ const Profile = () => {
                         <FaRegFaceAngry />
                     </div>
                     <h1 className='text-4xl mt-6 text-center font-medium'>{user}</h1>
+                    <div className='flex flex-col gap-2 mt-6 text-blue-700 font-medium decoration-solid underline'>
+                        <span className='cursor-pointer' onClick={()=>{setEmailPopup(true)}}>Change Email Address</span>
+                        <span className='cursor-pointer' onClick={()=>{setPassPopup(true)}}>Change Password</span>
+                    </div>
                     <button className='bg-red-600 text-white px-5 py-2 text-lg rounded-md justify-center align-middle items-center mt-4 hover:bg-red-800 hover: transition-colors duration-300' onClick={handleChange}>Logout</button>
                 </div>
                 <div className="bg-slate-100 md:w-3/4 w-full p-4 rounded-md shadow-lg shadow-black">
@@ -222,8 +233,11 @@ const Profile = () => {
                         })}
                     </div>
                 </div>
-
             </div>
+            {/* <EmailPopup/> */}
+            {emailPopup && <EmailPopup setEmailPopup={setEmailPopup}/>}
+            {passPopup && <PassPopup setPassPopup={setPassPopup}/>}
+
         </div>
     );
 };
