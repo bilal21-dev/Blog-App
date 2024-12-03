@@ -6,6 +6,9 @@ import { FaRegHeart, FaRegComment, FaShareSquare, FaSync } from "react-icons/fa"
 import axios from 'axios';
 import EmailPopup from './EmailPopup';
 import PassPopup from './PassPopup';
+import { MdDelete } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
+
 
 // import EmailPopup from './Components/ProfilePage/EmailPopup';
 
@@ -48,6 +51,31 @@ const Profile = () => {
             [key]: !prev[key], // Toggle the specific key
         }));
     };
+    // const deleteProduct = async (blog) => {
+    //     try {
+    //         const result = await axios.delete(`http://localhost:5000/delete/${blog._id}`)
+    //         if (result) {
+    //             alert("Blog is deleted");
+    //             fetchMyBlogs();
+    //         }
+
+    //     } catch (error) {
+    //         alert("Failed to delete Blog")
+    //     }
+    // }
+    const deleteProduct = async (blog) => {
+        try {
+            const userId = JSON.parse(localStorage.getItem('user'))._id; // Get userId from localStorage
+            const result = await axios.delete(`http://localhost:5000/delete/${blog._id}`, {
+                data: { userId }, // Pass userId in the request body
+            });
+            alert(result.data.message);
+            fetchMyBlogs(); // Refresh the blogs after deletion
+        } catch (error) {
+            alert(error.response?.data?.error || 'Failed to delete blog');
+        }
+    };
+    
     return (
         <div className="bg-gradient-to-r from-green-400 to-yellow-300 min-h-screen">
             {/* Outer container */}
@@ -58,8 +86,8 @@ const Profile = () => {
                     </div>
                     <h1 className='text-4xl mt-6 text-center font-medium'>{user}</h1>
                     <div className='flex flex-col gap-2 mt-6 text-blue-700 font-medium decoration-solid underline'>
-                        <span className='cursor-pointer' onClick={()=>{setEmailPopup(true)}}>Change Email Address</span>
-                        <span className='cursor-pointer' onClick={()=>{setPassPopup(true)}}>Change Password</span>
+                        <span className='cursor-pointer' onClick={() => { setEmailPopup(true) }}>Change Email Address</span>
+                        <span className='cursor-pointer' onClick={() => { setPassPopup(true) }}>Change Password</span>
                     </div>
                     <button className='bg-red-600 text-white px-5 py-2 text-lg rounded-md justify-center align-middle items-center mt-4 hover:bg-red-800 hover: transition-colors duration-300' onClick={handleChange}>Logout</button>
                 </div>
@@ -80,10 +108,17 @@ const Profile = () => {
                                             {/* Flip Button */}
                                             <button
                                                 onClick={() => toggleCardFlip(cardKey)}
-                                                className="absolute top-2 right-2 z-10 p-2 text-gray-600 hover:text-blue-500"
+                                                className="absolute top-2 right-0 z-10 p-2 text-gray-600 hover:text-blue-500"
                                             >
                                                 <FaSync />
                                             </button>
+                                            <button className="absolute top-1.5 right-6 text-[22px] z-10 p-2 text-gray-600 hover:text-blue-500" onClick={() => { deleteProduct(blog) }}>
+                                                <MdDelete />
+                                            </button>
+                                            <button className='absolute top-1.5 right-12 text-[22px] z-10 p-2 text-gray-600 hover:text-blue-500'>
+                                                <CiEdit className='' />
+                                            </button>
+
 
                                             {/* Caption Section */}
                                             {/* <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p> */}
@@ -161,15 +196,19 @@ const Profile = () => {
                                         {/* Front of Card */}
                                         <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
                                             {/* Flip Button */}
+                                            <button className="absolute top-1.5 right-6 text-[22px] z-10 p-2 text-gray-600 hover:text-blue-500" onClick={() => {deleteProduct(blog) }}>
+                                                <MdDelete />
+                                            </button>
                                             <button
                                                 onClick={() => toggleCardFlip(cardKey)}
-                                                className="absolute top-2 right-2 z-10 p-2 text-gray-600 hover:text-blue-500"
+                                                className="absolute top-2 right-0 z-10 p-2 text-gray-600 hover:text-blue-500"
                                             >
                                                 <FaSync />
                                             </button>
 
+
                                             {/* Caption Section */}
-                                            <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
+                                            <p className="ml-2 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
                                             <div className="p-6 border-b">
                                                 <h2 className="text-xl font-bold text-green-500">{blog.title}</h2>
                                                 <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
@@ -235,8 +274,8 @@ const Profile = () => {
                 </div>
             </div>
             {/* <EmailPopup/> */}
-            {emailPopup && <EmailPopup setEmailPopup={setEmailPopup}/>}
-            {passPopup && <PassPopup setPassPopup={setPassPopup}/>}
+            {emailPopup && <EmailPopup setEmailPopup={setEmailPopup} />}
+            {passPopup && <PassPopup setPassPopup={setPassPopup} />}
 
         </div>
     );
