@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaRegHeart, FaRegComment, FaShareSquare, FaSync } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaRegComment, FaShareSquare, FaSync } from "react-icons/fa";
 import { IoCreate } from "react-icons/io5";
 import PopUp from "./PopUp";
 import { useAuth } from '../AuthContext';
@@ -84,6 +84,39 @@ const Post = () => {
     }
   };
   
+
+  const handleLike = async (postId, index) => {
+    const userId = JSON.parse(localStorage.getItem("user"))._id;
+  
+    const updatedBlogs = [...blogs];  // Always use immutability
+    const blogToUpdate = updatedBlogs[index];
+  
+    // Check if the user already liked the post
+    const isLiked = blogToUpdate.likes.includes(userId);
+  
+    // Toggle the like status
+    if (isLiked) {
+      blogToUpdate.likes = blogToUpdate.likes.filter(id => id !== userId);
+    } else {
+      blogToUpdate.likes.push(userId);
+    }
+  
+    // Optimistically update the local state
+    setBlogs(updatedBlogs);
+  
+    try {
+      await axios.post(`http://localhost:5000/like/${postId}`, { userId });
+      
+      // Optionally, re-fetch the data from the backend
+      fetchBlogs();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to like/unlike the post. Reverting the change.");
+      fetchBlogs();  // Revert to the latest state from the backend
+    }
+  };
+  
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6 bg-gradient-to-r from-green-400 to-yellow-300">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
@@ -94,6 +127,11 @@ const Post = () => {
           </div>
         ) : Array.isArray(blogs) && blogs.length > 0 ? (
           blogs.map((blog, index) => {
+            const loggedInUser = JSON.parse(localStorage.getItem("user"));
+            const isLiked =
+              loggedInUser &&
+              Array.isArray(blog.likes) &&
+              blog.likes.includes(loggedInUser._id);
             return (
               <div
                 key={index}
@@ -136,9 +174,12 @@ const Post = () => {
 
                     {/* Action Row */}
                     <div className="p-6 flex justify-around items-center border-t">
-                      <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500">
-                        <FaRegHeart />
-                        <span>Like</span>
+                      <button
+                        onClick={() => handleLike(blog._id, index)}
+                        className="flex items-center space-x-1 text-gray-600 hover:text-blue-500"
+                      >
+                        {isLiked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+                        <span>{blog.likes.length}</span>
                       </button>
                       <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500">
                         <FaRegComment />

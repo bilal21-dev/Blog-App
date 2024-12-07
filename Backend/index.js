@@ -174,6 +174,36 @@ app.delete('/delete/:id', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while deleting the blog' });
     }
 });
+
+
+app.post('/like/:postId', async (req, res) => {
+    const { postId } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const blog = await Blog.findById(postId);
+
+        if (!blog) return res.status(404).send({ message: "Blog not found" });
+
+        // Toggle like/unlike
+        const isLiked = blog.likes.includes(userId);
+
+        if (isLiked) {
+            blog.likes = blog.likes.filter(id => id.toString() !== userId);
+        } else {
+            blog.likes.push(userId);
+        }
+
+        await blog.save();
+
+        res.send({ likes: blog.likes.length, isLiked: !isLiked });
+    } catch (err) {
+        res.status(500).send({ message: "Failed to like/unlike the post", error: err.message });
+    }
+});
+
+
+
 // Start server
 app.listen(5000, () => {
     console.log("Server is running on port 5000");

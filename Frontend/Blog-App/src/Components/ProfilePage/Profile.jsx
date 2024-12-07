@@ -51,18 +51,7 @@ const Profile = () => {
             [key]: !prev[key], // Toggle the specific key
         }));
     };
-    // const deleteProduct = async (blog) => {
-    //     try {
-    //         const result = await axios.delete(`http://localhost:5000/delete/${blog._id}`)
-    //         if (result) {
-    //             alert("Blog is deleted");
-    //             fetchMyBlogs();
-    //         }
-
-    //     } catch (error) {
-    //         alert("Failed to delete Blog")
-    //     }
-    // }
+    
     const deleteProduct = async (blog) => {
         try {
             const userId = JSON.parse(localStorage.getItem('user'))._id; // Get userId from localStorage
