@@ -4,6 +4,9 @@ import { IoCreate } from "react-icons/io5";
 import PopUp from "./PopUp";
 import { useAuth } from '../AuthContext';
 import axios from "axios";
+import { Alert } from 'antd';
+import NewsTicker from "./NewsTicker.jsx"
+
 
 const Post = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -11,13 +14,17 @@ const Post = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [flippedCards, setFlippedCards] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
+  const animation = {
+    animation: 'flip-in-hor-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  }
   const handleIconClick = () => {
     if (register) {
       setIsPopUpVisible(true);
     }
     else {
-      alert("You must register to create a post")
+      setShowAlert(true);
     }
   };
 
@@ -83,30 +90,30 @@ const Post = () => {
       alert("Failed to share post");
     }
   };
-  
+
 
   const handleLike = async (postId, index) => {
     const userId = JSON.parse(localStorage.getItem("user"))._id;
-  
+
     const updatedBlogs = [...blogs];  // Always use immutability
     const blogToUpdate = updatedBlogs[index];
-  
+
     // Check if the user already liked the post
     const isLiked = blogToUpdate.likes.includes(userId);
-  
+
     // Toggle the like status
     if (isLiked) {
       blogToUpdate.likes = blogToUpdate.likes.filter(id => id !== userId);
     } else {
       blogToUpdate.likes.push(userId);
     }
-  
+
     // Optimistically update the local state
     setBlogs(updatedBlogs);
-  
+
     try {
       await axios.post(`http://localhost:5000/like/${postId}`, { userId });
-      
+
       // Optionally, re-fetch the data from the backend
       fetchBlogs();
     } catch (err) {
@@ -115,14 +122,25 @@ const Post = () => {
       fetchBlogs();  // Revert to the latest state from the backend
     }
   };
-  
-  
+
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6 bg-gradient-to-r from-green-400 to-yellow-300">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6 bg-slate-200">
+      {showAlert && (
+        <Alert
+          message="Warning"
+          description="You must register to perform this action."
+          type="warning"
+          showIcon
+          closable
+          onClose={() => setShowAlert(false)} // Hide alert when closed
+        />
+      )}
+      <NewsTicker/>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-3">
         {loading ? (
           <div className="absolute top-[250px] left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4">
-            <div className="loader border-t-4 border-green-500 rounded-full w-16 h-16 animate-spin"></div>
+            <div className="loader border-t-4 border-blue-600 rounded-full w-16 h-16 animate-spin"></div>
             <p className="ml-1 text-lg font-semibold text-black">Loading blogs...</p>
           </div>
         ) : Array.isArray(blogs) && blogs.length > 0 ? (
@@ -136,12 +154,13 @@ const Post = () => {
               <div
                 key={index}
                 className="relative perspective-1000 w-full h-[460px]"
+                style={animation}
               >
                 <div
                   className={`absolute w-full h-full transition-transform duration-700 transform-style-3d ${flippedCards[index] ? 'rotate-y-180' : ''}`}
                 >
                   {/* Front of Card */}
-                  <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
+                  <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200 ">
                     {/* Flip Button */}
                     <button
                       onClick={() => toggleCardFlip(index)}
@@ -153,7 +172,7 @@ const Post = () => {
                     {/* Caption Section */}
                     <p className="ml-4 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
                     <div className="p-6 border-b">
-                      <h2 className="text-xl font-bold text-green-500">{blog.title}</h2>
+                      <h2 className="text-xl font-extrabold text-blue-900">{blog.title}</h2>
                       <p className="text-sm text-gray-600 mt-2">{blog.description}</p>
                     </div>
 
@@ -217,16 +236,18 @@ const Post = () => {
             )
           })
         ) : (
-          <p className="flex justify-center text-center text-gray-500 text-xl">
-            No blogs available
-          </p>
+          <div className=" relative ">
+            <p className="absolute left-[560px] text-gray-500 text-xl">
+              No blogs available
+            </p>
+          </div>
         )}
       </div>
 
       {/* Floating Icon to Trigger Pop-Up */}
       <IoCreate
         onClick={handleIconClick}
-        className="fixed bottom-4 right-2 text-[60px] sm:text-[70px] text-green-500 hover:text-green-700 cursor-pointer"
+        className="fixed bottom-4 right-2 text-[60px] sm:text-[70px] text-blue-900 hover:text-blue-950 cursor-pointer"
       />
 
       {/* Conditionally Render the PopUp */}

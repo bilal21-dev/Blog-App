@@ -5,10 +5,10 @@ import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-sv
 
 const Contact = () => {
     return (
-        <div className="bg-gradient-to-r from-green-400 to-yellow-300 min-h-screen flex flex-col items-center py-10 px-4">
+        <div className="bg-slate-200 min-h-screen flex flex-col items-center py-10 px-4">
             <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg p-8">
                 {/* Heading */}
-                <h1 className="text-4xl font-bold text-green-500 text-center mb-6">
+                <h1 className="text-4xl font-bold text-blue-900 text-center mb-6">
                     Contact Us
                 </h1>
                 
@@ -57,7 +57,7 @@ const Contact = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-green-500 text-white py-3 rounded-lg text-lg hover:bg-green-700 transition duration-300"
+                        className="w-full bg-blue-900 text-white py-3 rounded-lg text-lg hover:bg-blue-950 transition duration-300"
                     >
                         Send Message
                     </button>
@@ -65,7 +65,7 @@ const Contact = () => {
 
                 {/* Social Media Section */}
                 <div className="mt-10">
-                    <h2 className="text-2xl font-bold text-green-500 mb-4 text-center">Follow Us</h2>
+                    <h2 className="text-2xl font-bold text-blue-900 mb-4 text-center">Follow Us</h2>
                     <div className="flex justify-center space-x-6">
                         <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-indigo-600 hover:text-indigo-800">
                             <FontAwesomeIcon icon={faFacebookF} className="text-2xl" />

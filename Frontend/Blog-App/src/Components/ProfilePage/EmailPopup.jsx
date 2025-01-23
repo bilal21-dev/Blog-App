@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { MdCancel } from 'react-icons/md';
 
 const EmailPopup = ({ setEmailPopup }) => {
-  const [email, setEmail] = useState('');
-  const params = useParams();
+    const [email, setEmail] = useState('');
+    const params = useParams();
 
   const getEmail = async () => {
     try {
@@ -29,7 +29,6 @@ const EmailPopup = ({ setEmailPopup }) => {
       const response = await axios.put(`http://localhost:5000/update/${params.id}`, { email });
       if (response.data) {
         alert('Email updated successfully!');
-        setEmailPopup(false);
       } else {
         alert('Failed to update email.');
       }
@@ -38,11 +37,14 @@ const EmailPopup = ({ setEmailPopup }) => {
       alert('Error updating email.');
     }
   };
+  const animation = {
+    animation: 'scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" >
       {/* Popup Content */}
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto sm:w-96 relative">
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto sm:w-96 relative" style={animation}>
         {/* Close Button */}
         <button className="absolute top-2 right-4 text-gray-500 hover:text-gray-700" onClick={() => setEmailPopup(false)}>
           <MdCancel size={24} />

@@ -33,10 +33,9 @@ const SignUp = () => {
         }
     }
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-r from-green-400 to-yellow-300">
-            <div className="bg-white shadow-lg shadow-black rounded-lg p-8 w-full max-w-md">
-
-                <h2 className="text-2xl font-bold text-center text-green-500 mb-6">Sign Up</h2>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-200">
+            <div className="bg-white shadow-md shadow-black rounded-lg p-8 w-full max-w-md">
+                <h2 className="text-2xl font-bold text-center text-blue-900 mb-6">Sign Up</h2>
 
                 <form onSubmit={collectData}>
                     <div className="mb-4">
@@ -47,7 +46,7 @@ const SignUp = () => {
                             type="text"
                             value={name}
                             placeholder="Enter your username"
-                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
@@ -61,7 +60,7 @@ const SignUp = () => {
                             type="email"
                             value={email}
                             placeholder="Enter your email"
-                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
                             onChange={(e) => setEmail(e.target.value)}
 
                         />
@@ -76,7 +75,7 @@ const SignUp = () => {
                             type="password"
                             value={password}
                             placeholder="Enter your password"
-                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
@@ -90,14 +89,14 @@ const SignUp = () => {
                             type="password"
                             value={password}
                             placeholder="Confirm your password"
-                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300"
+                        className="w-full bg-blue-900 text-white py-2 px-4 rounded-md hover:bg-blue-950 transition-colors duration-300"
                     >
                         Sign Up
                     </button>
@@ -105,7 +104,7 @@ const SignUp = () => {
 
                 <p className="text-sm text-center text-gray-600 mt-4">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-green-500 hover:underline">
+                    <Link to="/login" className="text-blue-900 hover:underline">
                         Log In
                     </Link>
                 </p>

@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { MdCancel } from 'react-icons/md';
+
 
 const PassPopup = ({ setPassPopup }) => {
     const params = useParams();
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const animation = {
+        animation: 'scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+      }
+    
 
     const updatePass = async () => {
         try {
@@ -37,25 +43,28 @@ const PassPopup = ({ setPassPopup }) => {
     }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto sm:w-96 relative">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto sm:w-96 relative" style={animation}>
                 {/* Update Button */}
+                <button className="absolute top-2 right-4 text-gray-500 hover:text-gray-700" onClick={() => setPassPopup(false)}>
+                    <MdCancel size={24} />
+                </button>
                 <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mt-2">
+                    <label htmlFor="email" className="block text-sm font-bold text-gray-700 mt-2">
                         Enter Old Password
                     </label>
                     <input
                         // type="password"  
                         placeholder="Enter your old password"
-                        className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                        onChange={(e)=>{setPassword(e.target.value)}}
+                        className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
+                        onChange={(e) => { setPassword(e.target.value) }}
                     />
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mt-2">
+                    <label htmlFor="email" className="block text-sm font-bold text-gray-700 mt-2">
                         Enter New Password
                     </label>
                     <input
                         type="password"
                         placeholder="Enter your new password"
-                        className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-900"
                         onChange={(e) => { setNewPassword(e.target.value) }}
                     />
                 </div>

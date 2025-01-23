@@ -64,14 +64,17 @@ function PopUp({ closePopUp, addBlog }) {
     });
     result = result.data;
   };
+  const animation = {
+    animation: 'scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both',
+  }
 
   return (
     <div className="popup-overlay">
-      <div className="popup-container">
+      <div className="popup-container" style={animation}>
         <button className="close-btn" onClick={closePopUp}>
           <MdCancel />
         </button>
-        <h1 className="heading font-extrabold text-green-500 text-3xl">Create Blog</h1>
+        <h1 className="heading font-extrabold text-blue-900 text-3xl">Create Blog</h1>
         <div className="form-group">
           <label htmlFor="title" className='font-bold'>Title</label>
           <input
@@ -80,7 +83,7 @@ function PopUp({ closePopUp, addBlog }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter the blog title"
-            className="input-field focus:outline-none focus:ring-green-500 focus:border-green-500"
+            className="input-field focus:outline-none focus:ring-blue-900 focus:border-blue-900"
           />
         </div>
         <div className="form-group">
@@ -90,7 +93,7 @@ function PopUp({ closePopUp, addBlog }) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter a short description"
-            className="textarea-field focus:outline-none focus:ring-green-500 focus:border-green-500"
+            className="textarea-field focus:outline-none focus:ring-blue-900 focus:border-blue-900"
           ></textarea>
         </div>
         <div className="form-group">
@@ -100,7 +103,7 @@ function PopUp({ closePopUp, addBlog }) {
             id="image"
             accept="image/*"
             onChange={handleImageUpload}
-            className="file-input focus:outline-none focus:ring-green-500 focus:border-green-500"
+            className="file-input focus:outline-none focus:ring-blue-900 focus:border-blue-900"
           />
           {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
         </div>
@@ -108,7 +111,7 @@ function PopUp({ closePopUp, addBlog }) {
           <label htmlFor="editor" className='font-bold'>Content</label>
           <div ref={editorRef} className="quill-editor "></div>
         </div>
-        <button className="submit-btn bg-green-500 hover:bg-green-700 hover:transition-colors duration-300" onClick={handleSubmit}>
+        <button className="submit-btn bg-blue-900 hover:bg-blue-950 hover:transition-colors duration-300" onClick={handleSubmit}>
           Save Blog
         </button>
       </div>
