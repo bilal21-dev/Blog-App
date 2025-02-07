@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs } from 'antd';
+
 import { useAuth } from '../AuthContext';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { FaRegHeart, FaRegComment, FaShareSquare, FaSync } from "react-icons/fa";
+import {  FaSync } from "react-icons/fa";
 import axios from 'axios';
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
@@ -11,6 +11,7 @@ import PassPopup from './PassPopup';
 import { Divider } from 'antd';
 
 import ProfileHeader from './ProfileHeader';
+import EditPostPopUp from './EditPostPopup';
 
 const ProfilePage = () => {
 
@@ -23,6 +24,9 @@ const ProfilePage = () => {
     const params = useParams();
     const [flippedCards, setFlippedCards] = useState({});
     const [sharedPosts, setSharedPosts] = useState([]);
+    const [showEditPopUp, setShowEditPopUp] = useState(false); // Manage visibility of edit PopUp
+    const [blogToEdit, setBlogToEdit] = useState(null); // Blog to be edited
+
     useEffect(() => {
         fetchMyBlogs();
     }, []);
@@ -64,21 +68,43 @@ const ProfilePage = () => {
     const animation = {
         animation: 'flip-in-hor-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
     }
+
+
+    const handleEditClick = (blog) => {
+        console.log(blog);
+        
+        setBlogToEdit(blog); // Set the blog data to be edited
+        setShowEditPopUp(true); // Show the edit PopUp
+    };
+
     return (
         <div className="profile-page">
             <ProfileHeader />
             <Divider orientation="left" plain style={{ color: 'blue', fontSize: '23px', fontWeight: 'bold' }}>
                 Your Blogs
             </Divider>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-3 px-4 sm:px-6 md:px-8">
+
+            {showEditPopUp && (
+                <EditPostPopUp
+                    closePopUp={() => setShowEditPopUp(false)} // Close the PopUp
+                    addBlog={(newBlogData) => {
+                        // Optionally, handle the new/updated blog data (could re-fetch or update local state)
+                        setMyblogs(prevBlogs => prevBlogs.map(blog => blog._id === newBlogData._id ? newBlogData : blog));
+                        setShowEditPopUp(false); // Close the PopUp after saving
+                    }}
+                   blogId={blogToEdit?._id} // Pass the blog data to edit
+                />
+            )}
+
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-3 px-4 sm:px-6 md:px-8">
                 {myblogs.map((blog, index) => {
                     const cardKey = `myblogs-${index}`;
                     return (
-                        <div key={cardKey} className="relative perspective-1000 w-full h-[400px]">
+                        <div key={cardKey} className="relative perspective-1000 w-full min-h-[330px]">
                             <div className={`absolute w-full h-full transition-transform duration-700 transform-style-3d ${flippedCards[cardKey] ? 'rotate-y-180' : ''}`}>
                                 {/* Front of Card */}
                                 <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
-                                    {/* Flip Button */}
+                                    {/* Buttons */}
                                     <button
                                         onClick={() => toggleCardFlip(cardKey)}
                                         className="absolute top-2 right-0 z-10 p-2 text-gray-600 hover:text-blue-500"
@@ -91,8 +117,8 @@ const ProfilePage = () => {
                                     >
                                         <MdDelete />
                                     </button>
-                                    <button className='absolute top-1.5 right-12 text-[22px] z-10 p-2 text-gray-600 hover:text-blue-500'>
-                                        <CiEdit className='' />
+                                    <button className="absolute top-1.5 right-12 text-[22px] z-10 p-2 text-gray-600 hover:text-blue-500">
+                                        <CiEdit className="" onClick={() => handleEditClick(blog)}/>
                                     </button>
 
                                     {/* Caption Section */}
@@ -106,20 +132,19 @@ const ProfilePage = () => {
                                         <img
                                             src={`http://localhost:5000/${blog.image}`}
                                             alt={blog.title}
-                                            className="w-full h-48 sm:h-64 object-cover"
+                                            className="w-full h-48 sm:h-64 object-cover object-center"
                                         />
                                     ) : (
                                         <img
                                             src="https://via.placeholder.com/400x250"
                                             alt="Placeholder"
-                                            className="w-full h-48 sm:h-64 object-cover"
+                                            className="w-full h-48 sm:h-64 object-cover object-center"
                                         />
                                     )}
                                 </div>
 
                                 {/* Back of Card */}
                                 <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
-                                    {/* Flip Back Button */}
                                     <button
                                         onClick={() => toggleCardFlip(cardKey)}
                                         className="absolute top-2 right-2 z-10 p-2 text-gray-600 hover:text-blue-500"
@@ -127,7 +152,6 @@ const ProfilePage = () => {
                                         <FaSync />
                                     </button>
 
-                                    {/* Full Blog Content */}
                                     <div className="p-4 sm:p-6 h-full overflow-auto">
                                         {blog.content && (
                                             <div className="prose">
@@ -141,14 +165,16 @@ const ProfilePage = () => {
                         </div>
                     );
                 })}
+
+                {/* Similar changes for sharedPosts */}
                 {sharedPosts.map((blog, index) => {
                     const cardKey = `shared-${index}`;
                     return (
-                        <div key={cardKey} className="relative perspective-1000 w-full h-[400px]">
+                        <div key={cardKey} className="relative perspective-1000 w-full min-h-[300px]">
                             <div className={`absolute w-full h-full transition-transform duration-700 transform-style-3d ${flippedCards[cardKey] ? 'rotate-y-180' : ''}`}>
                                 {/* Front of Card */}
                                 <div className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
-                                    {/* Flip Button */}
+                                    {/* Buttons */}
                                     <button
                                         onClick={() => toggleCardFlip(cardKey)}
                                         className="absolute top-2 right-0 z-10 p-2 text-gray-600 hover:text-blue-500"
@@ -162,7 +188,6 @@ const ProfilePage = () => {
                                         <MdDelete />
                                     </button>
 
-                                    {/* Caption Section */}
                                     <p className="ml-2 text-[12px] my-1 text-gray-400 font-light">Posted by {blog.author}</p>
                                     <div className="py-3 px-4 sm:px-6 border-b">
                                         <h2 className="text-lg sm:text-xl font-bold text-blue-900">{blog.title}</h2>
@@ -174,20 +199,19 @@ const ProfilePage = () => {
                                         <img
                                             src={`http://localhost:5000/${blog.image}`}
                                             alt={blog.title}
-                                            className="w-full h-48 sm:h-64 object-cover"
+                                            className="w-full h-48 sm:h-64 object-cover object-center"
                                         />
                                     ) : (
                                         <img
                                             src="https://via.placeholder.com/400x250"
                                             alt="Placeholder"
-                                            className="w-full h-48 sm:h-64 object-cover"
+                                            className="w-full h-48 sm:h-64 object-cover object-center"
                                         />
                                     )}
                                 </div>
 
                                 {/* Back of Card */}
                                 <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-white rounded-lg shadow-md shadow-black overflow-hidden border border-gray-200">
-                                    {/* Flip Back Button */}
                                     <button
                                         onClick={() => toggleCardFlip(cardKey)}
                                         className="absolute top-2 right-2 z-10 p-2 text-gray-600 hover:text-blue-500"
@@ -195,7 +219,6 @@ const ProfilePage = () => {
                                         <FaSync />
                                     </button>
 
-                                    {/* Full Blog Content */}
                                     <div className="p-4 sm:p-6 h-full overflow-auto">
                                         {blog.content && (
                                             <div className="prose">
@@ -210,8 +233,13 @@ const ProfilePage = () => {
                     );
                 })}
             </div>
-
         </div>
+
+      
+
+
+        
+
     );
 };
 

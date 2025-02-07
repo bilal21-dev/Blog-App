@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const ProfileSettingsContext = createContext();
 
@@ -15,7 +16,9 @@ export const ProfileSettingsProvider = ({ children }) => {
     const [profilePic, setProfilePic] = useState(
         localStorage.getItem("profilePic") || 'https://via.placeholder.com/100'
     );
-
+    const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const params = useParams();
     let user = JSON.parse(localStorage.getItem("user"));
     const getEmail = async () => {
         try {
@@ -91,8 +94,27 @@ export const ProfileSettingsProvider = ({ children }) => {
             reader.readAsDataURL(file);
         }
     };
+    const updatePass = async () => {
+        try {
+            const response = await axios.put(`http://localhost:5000/password/${user._id}`, {
+                currentPassword: password,
+                newPassword: newPassword,
+            });
+
+            if (response.data.success) {
+                alert('Password updated successfully!');
+            }
+        } catch (error) {
+            // Handle specific backend error messages
+            const errorMessage = error.response?.data?.error ||
+                "Password update failed. Check current password and try again.";
+            alert(errorMessage);
+        }
+    };
+
+
     return (
-        <ProfileSettingsContext.Provider value={{ email, tempEmail, setTempEmail, getEmail, updateEmail, setEmail, bio, updateBio, fetchBio, tempBio, setTempBio,profilePic,setProfilePic,handleImageChange }}>
+        <ProfileSettingsContext.Provider value={{ email, tempEmail, setTempEmail, getEmail, updateEmail, setEmail, bio, updateBio, fetchBio, tempBio, setTempBio, profilePic, setProfilePic, handleImageChange, password, setPassword, newPassword, setNewPassword, updatePass }}>
             {children}
         </ProfileSettingsContext.Provider>
     );

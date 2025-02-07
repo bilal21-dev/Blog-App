@@ -23,6 +23,10 @@ const ProfileHeader = () => {
         setTempBio,
         profilePic,
         setProfilePic,
+        password,
+        newPassword,
+        updatePass,
+        setPassword, setNewPassword,
     } = useProfileSettings();
 
     let user = JSON.parse(localStorage.getItem("user"));
@@ -59,7 +63,7 @@ const ProfileHeader = () => {
         try {
             console.log("uploading...");
             const response = await axios.post(
-                `http://localhost:5000/upload-profile-pic/${user._id}`,
+                `http://localhost:5000/profile-pic/${user._id}`,
                 formData,
                 {
                     headers: {
@@ -71,7 +75,7 @@ const ProfileHeader = () => {
             if (response.data.filePath) {
                 const newProfilePic = `http://localhost:5000/${response.data.filePath}`;
                 setProfilePic(newProfilePic);
-                localStorage.setItem('profilePic',newProfilePic);
+                localStorage.setItem('profilePic', newProfilePic);
                 message.success('Profile picture uploaded successfully.');
             } else {
                 message.error('Failed to upload profile picture.');
@@ -92,7 +96,6 @@ const ProfileHeader = () => {
             message.info('Profile picture removed.');
         },
     };
-
 
     const fetchUserProfile = async () => {
         try {
@@ -155,7 +158,34 @@ const ProfileHeader = () => {
                     Change Password
                 </span>
             ),
-            children: <p>Change Password Feature Coming Soon</p>,
+            children: (
+                <div className="flex gap-2">
+                    <input
+                        type='password'
+                        id="message"
+                        rows="5"
+                        className="w-full px-4 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        placeholder="Enter your Old Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <input
+                        type='password'
+                        id="message"
+                        rows="5"
+                        className="w-full px-4 border rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        placeholder="Enter your New Password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <button
+                        className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+                        onClick={updatePass}
+                    >
+                        Update
+                    </button>
+                </div>
+            )
         },
         {
             key: '3',
@@ -199,20 +229,26 @@ const ProfileHeader = () => {
     ];
 
     return (
-        <div className="flex items-center justify-s mb-4 gap-10 py-4 px-8 relative ">
-            <div className="profile-pic">
-                <img
-                    src={profilePic || 'default-image-url.png'} // Display a default image if none is set
-                    alt="Profile"
-                    className="rounded-full h-[170px] w-[170px]"
-                />
+        <div className="relative mb-4 py-4 px-4 sm:px-8">
+            {/* Container for Profile Pic and User Details */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                {/* Profile Picture */}
+                <div className="profile-pic">
+                    <img
+                        src={profilePic || 'default-image-url.png'} // Display a default image if none is set
+                        alt="Profile"
+                        className="rounded-full h-32 w-32 sm:h-[160px] sm:w-[160px] object-cover"
+                    />
+                </div>
+                {/* User Details */}
+                <div className="flex flex-col gap-2 text-center mt-2 ml-2 sm:text-left">
+                    <p className="text-2xl sm:text-4xl font-bold text-blue-950">{user2}</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">{email}</p>
+                    <p className="text-sm sm:text-base">{bio}</p>
+                </div>
             </div>
-            <div className="flex flex-col relative gap-6">
-                <p className="text-4xl font-bold text-blue-950">{user2}</p>
-                <p className="absolute top-9 text-gray-400 text-sm">{email}</p>
-                <p>{bio}</p>
-            </div>
-            <div className="absolute top-2 right-2 text-blue-950">
+            {/* Edit Button and Modal */}
+            <div className="absolute top-2 right-2">
                 <Button
                     type="primary"
                     onClick={showModal}

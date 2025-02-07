@@ -45,7 +45,7 @@ const Post = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/home");
+      const response = await axios.get("http://localhost:5000/home/fetchblogs");
       setBlogs(response.data);
       setLoading(false);
     } catch (err) {
@@ -93,8 +93,25 @@ const Post = () => {
 
 
   const handleLike = async (postId, index) => {
-    const userId = JSON.parse(localStorage.getItem("user"))._id;
+    const token = localStorage.getItem("token");
+    console.log(token);
+    
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    // console.log("Authorization Header Sent:", config.headers.Authorization);
 
+    const user = localStorage.getItem("user");
+    if (!user || !token) {
+      alert("You must be logged in to like a post!");
+      return; // Exit the function
+    }
+  
+    const userId = JSON.parse(user)._id;
+
+  
     const updatedBlogs = [...blogs];  // Always use immutability
     const blogToUpdate = updatedBlogs[index];
 
@@ -112,9 +129,10 @@ const Post = () => {
     setBlogs(updatedBlogs);
 
     try {
-      await axios.post(`http://localhost:5000/like/${postId}`, { userId });
+      console.log("hello");
+      const response = await axios.post(`http://localhost:5000/like/${postId}`, { userId }, config);
+      console.log(response);
 
-      // Optionally, re-fetch the data from the backend
       fetchBlogs();
     } catch (err) {
       console.error(err);
@@ -136,7 +154,7 @@ const Post = () => {
           onClose={() => setShowAlert(false)} // Hide alert when closed
         />
       )}
-      <NewsTicker/>
+      <NewsTicker />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-3">
         {loading ? (
           <div className="absolute top-[250px] left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4">

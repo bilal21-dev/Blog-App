@@ -10,35 +10,53 @@ const Login = () => {
   const { setProfile, setRegister } = useAuth();
   const navigate = useNavigate();
   const handleLogin = async (e) => {
-    let user = localStorage.getItem("user");
-    user = JSON.parse(user)
     e.preventDefault();
-    let result = await axios.post('http://localhost:5000/login', {
-      email,
-      password
-    })
-    result = result.data
-    if (result && result.result === 'No record') {
-      alert("Incorrect password or email");
-    } else if (result && result._id) {
-      localStorage.setItem('user', JSON.stringify(result))
-      setRegister(true);
-      localStorage.setItem("registry", true)
-      setProfile(true)
-      localStorage.setItem("profile", true)
-      navigate(`/profile/${result._id}`)
-    }
-    else {
-      alert("enter correct details")
+    try {
+      const response = await axios.post('http://localhost:5000/auth/login', {
+        email,
+        password
+      });
+      console.log(response);
+    
+      
+      // const userData = response.data;
+      const { user, token } = response.data
+      console.log("outside");
+      if (user && user._id) {
+        console.log("inside");
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem("token", token);
+        setRegister(true);
+        localStorage.setItem("registry", true);
+        setProfile(true);
+        localStorage.setItem("profile", true);
+        navigate(`/profile/${user._id}`);
+      }
+    } catch (error) {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            alert("Please enter both email and password");
+            break;
+          case 401:
+            alert("Invalid email or password");
+            break;
+          case 404:
+            alert("User not found");
+            break;
+          default:
+            alert("Login failed. Please try again.");
+        }
+      } else {
+        alert("Network error. Please check your connection.");
+      }
     }
 
-  }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-200">
-      <div className="bg-white shadow-md shadow-black rounded-lg p-8 w-full max-w-md">
-
+      <div className="bg-white shadow-sm shadow-black rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-blue-900 mb-6">Login</h2>
-
         <form onSubmit={handleLogin}>
 
           <div className="mb-4">

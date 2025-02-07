@@ -399,7 +399,7 @@ const Navbar = () => {
     return (
         <Layout>
             <Header 
-                className="relative z-50 flex items-center justify-between px-4 py-2"
+                className="relative  flex items-center justify-between px-4 py-2"
                 style={{
                     display: 'flex',
                     alignItems: 'center',
